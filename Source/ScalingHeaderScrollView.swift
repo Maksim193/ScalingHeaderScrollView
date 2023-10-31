@@ -74,6 +74,8 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 
     /// Use this variable to programmatically change header's visibility state
     @Binding private var shouldSnapTo: SnapHeaderState?
+    
+    @Binding private var progressViewColor: Color
 
     /// Called once pull to refresh is triggered
     private var didPullToRefresh: (() -> Void)?
@@ -168,6 +170,7 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
         _isLoading = .constant(false)
         _scrollToTop = .constant(false)
         _shouldSnapTo = .constant(nil)
+        _progressViewColor = .constant(.white)
     }
 
     // MARK: - Body builder
@@ -233,7 +236,7 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 
     private var progressView: some View {
         ProgressView()
-            .progressViewStyle(CircularProgressViewStyle())
+            .progressViewStyle(CircularProgressViewStyle(tint: progressViewColor))
             .frame(width: UIScreen.main.bounds.width, height: getHeightForLoadingView())
             .scaleEffect(1.25)
     }
@@ -425,17 +428,19 @@ extension ScalingHeaderScrollView {
     }
 
     /// Allows to set up callback and `isLoading` state for pull-to-refresh action
-    public func pullToRefresh(isLoading: Binding<Bool>, perform: @escaping () -> Void) -> ScalingHeaderScrollView {
+    public func pullToRefresh(isLoading: Binding<Bool>, color: Color?, perform: @escaping () -> Void) -> ScalingHeaderScrollView {
         var scalingHeaderScrollView = self
         scalingHeaderScrollView._isLoading = isLoading
+        scalingHeaderScrollView.progressViewColor = color ?? .white
         scalingHeaderScrollView.didPullToRefresh = perform
         return scalingHeaderScrollView
     }
 
     /// Allows to set up callback and `isLoading` state for pull-to-load-more action
-    public func pullToLoadMore(isLoading: Binding<Bool>, contentOffset: CGFloat, perform: @escaping () -> Void) -> ScalingHeaderScrollView {
+    public func pullToLoadMore(isLoading: Binding<Bool>, color: Color?, contentOffset: CGFloat, perform: @escaping () -> Void) -> ScalingHeaderScrollView {
         var scalingHeaderScrollView = self
         scalingHeaderScrollView._isLoading = isLoading
+        scalingHeaderScrollView.progressViewColor = color ?? .white
         scalingHeaderScrollView.pullToLoadMoreContentOffset = contentOffset
         scalingHeaderScrollView.didPullToLoadMore = perform
         return scalingHeaderScrollView
