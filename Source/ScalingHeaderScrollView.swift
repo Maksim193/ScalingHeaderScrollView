@@ -44,6 +44,9 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 
     /// UIKit's UIScrollView
     @State private var uiScrollView: UIScrollView?
+    
+    /// Enable or disable UIKit's UIScrollView scrolling
+    @State private var isScrollEnable: Bool = true
 
     /// Sets the opacity value for pull-to-load-more progress view
     @State private var pullToLoadOpacity: CGFloat = 1.0
@@ -245,6 +248,7 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 
     private func configure(scrollView: UIScrollView) {
         scrollView.delegate = scrollViewDelegate
+        scrollView.isScrollEnabled = isScrollEnable
         if let didPullToRefresh = didPullToRefresh {
             scrollViewDelegate.didPullToRefresh = {
                 pullToLoadMoreInProgress = false
@@ -530,6 +534,12 @@ extension ScalingHeaderScrollView {
     public func hideScrollIndicators(_ hide: Bool = false) -> ScalingHeaderScrollView {
         var scalingHeaderScrollView = self
         scalingHeaderScrollView.showsIndicators = hide
+        return scalingHeaderScrollView
+    }
+    
+    public func enableScrolling(_ scrollEnable: Bool = true) -> ScalingHeaderScrollView {
+        var scalingHeaderScrollView = self
+        scalingHeaderScrollView.isScrollEnable = scrollEnable
         return scalingHeaderScrollView
     }
 
