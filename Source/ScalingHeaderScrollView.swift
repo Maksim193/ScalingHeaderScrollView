@@ -224,8 +224,6 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 						if -getGeometryReaderVsScrollView(scrollGeometry: scrollGeometry, globalGeometry: globalGeometry) > defaultScrollGeometryMinY {
 							defaultScrollGeometryMinY = minY
 						}
-						print("getGeometryReaderVsScrollView(scrollGeometry: scrollGeometry, globalGeometry: globalGeometry): \(getGeometryReaderVsScrollView(scrollGeometry: scrollGeometry, globalGeometry: globalGeometry))")
-						print("defaultScrollGeometryMinY: \(defaultScrollGeometryMinY)")
 					}
 				}
 				.background(Color.clear)
@@ -380,17 +378,9 @@ public struct ScalingHeaderScrollView<Header: View, Content: View>: View {
 	}
 
 	private func getGeometryReaderVsScrollView(scrollGeometry: GeometryProxy, globalGeometry: GeometryProxy) -> CGFloat {
-		print("isModalPresented: \(isModalPresented)")
-		// print("scrollGeometry.frame(in: .global).minY: \(scrollGeometry.frame(in: .global).minY)")
-		// print("defaultScrollGeometryMinY \(defaultScrollGeometryMinY)")
-		// print("scrollGeometry.frame(in: .global).minY < defaultScrollGeometryMinY: \(scrollGeometry.frame(in: .global).minY < defaultScrollGeometryMinY)")
-		if isModalPresented { //&& scrollGeometry.frame(in: .global).minY < defaultScrollGeometryMinY {
-			// print("globalGeometry.frame(in: .global).minY: \(globalGeometry.frame(in: .global).minY)")
-			print("getScrollOffset: \(getScrollOffset)")
+		if isModalPresented {
 			return getScrollOffset() - defaultScrollGeometryMinY
 		} else {
-			print("else \(getScrollOffset() - scrollGeometry.frame(in: .global).minY + globalGeometry.frame(in: .global).minY)")
-			print(" ----  scrollGeometry.frame(in: .global).minY \(scrollGeometry.frame(in: .global).minY)")
 			return getScrollOffset() - scrollGeometry.frame(in: .global).minY + globalGeometry.frame(in: .global).minY
 		}
 	}
